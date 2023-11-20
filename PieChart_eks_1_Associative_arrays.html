@@ -1,0 +1,63 @@
+<html>
+<head> 
+    <style type="text/css">
+        .ramme {
+          width: 100%;
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="ramme">
+<canvas width="200" height="200"></canvas>
+</div>
+</body>
+<script>
+
+var eksempel;
+var ordfoerereSum = 0;
+var antallTallgrunnlag = 0;
+var tallgrunnlag = [];
+var elementVerdi;
+var sektorGrader;
+
+eksempel = document.querySelector("canvas").getContext("2d");
+//Array med navngitte attributter.
+tallgrunnlag = [
+    {element: "Arbeiderpartiet", ordfoerere: 111, fyllfarge: "#FF0000"},
+    {element: "H�yre", ordfoerere: 102, fyllfarge: "#00FF00"},
+    {element: "Senterpartiet", ordfoerere:87, fyllfarge: "#FFFF00"},
+    {element: "Frp", ordfoerere: 14, fyllfarge: "#0000FF"},
+    {element: "Krf", ordfoerere: 12, fyllfarge: "#00FFFF"}
+];
+
+antallTallgrunnlag = tallgrunnlag.length;
+
+for (var x=0; x<antallTallgrunnlag; x++){
+    ordfoerereSum += tallgrunnlag [x]['ordfoerere'];
+}
+console.log(ordfoerereSum);
+
+var sumGrader = 0;
+
+for (elementVerdi of tallgrunnlag) {
+    //Beregner antall grader p�gjeldende sektor vil ha av hele sektordiagrammet.
+    var sektorGrader = (elementVerdi.ordfoerere / ordfoerereSum) * 2 * Math.PI;
+    console.log("sektor "+elementVerdi['element']+" er "+sektorGrader);
+    //tegne et sirkelstykke og en linje fra sirkelstykke til senter for � avdele sektor.
+    eksempel.beginPath();
+    //xxx.arc(x-koordinat for senter, y-koordiant for senter, radius, startgradtall, sluttgradtall)
+    eksempel.arc(100, 100, 100, sumGrader, sumGrader + sektorGrader);
+    sumGrader += sektorGrader;
+    //trekker en rett linje til senter.
+    eksempel.lineTo(100, 100);
+    //fyll sektor med farge som er angitt.
+    eksempel.fillStyle = elementVerdi.fyllfarge;
+    eksempel.fill();
+}
+
+</script>
+</html>
